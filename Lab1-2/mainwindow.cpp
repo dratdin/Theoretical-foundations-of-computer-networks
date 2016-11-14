@@ -11,8 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 MainWindow::~MainWindow() { delete ui; }
 
 //Handle creating of GUI for mr.Glitsevich
-void
-MainWindow::configurateGUI()
+void MainWindow::configurateGUI()
 {
     this->setWindowTitle("Com ports");
     this->setFixedSize(400, 350);
@@ -38,8 +37,7 @@ MainWindow::configurateGUI()
     connect(&com1, SIGNAL(readyRead()), this, SLOT(readFromCOM1()));
 }
 
-void
-MainWindow::connectPorts(QString nameCOM1, QString nameCOM2)
+void MainWindow::connectPorts(QString nameCOM1, QString nameCOM2)
 {
     com1.setPortName(nameCOM1);
     initializePort(com1);
@@ -47,8 +45,7 @@ MainWindow::connectPorts(QString nameCOM1, QString nameCOM2)
     initializePort(com2);
 }
 
-void
-MainWindow::initializePort(QSerialPort &port)
+void MainWindow::initializePort(QSerialPort &port)
 {
     port.setBaudRate(QSerialPort::Baud9600);
     port.setStopBits(QSerialPort::OneStop);
@@ -68,8 +65,7 @@ MainWindow::initializePort(QSerialPort &port)
 #define PACKAGE_SIZE 11
 #define DATA_INDEX_START 3
 
-void
-MainWindow::writeToCOM2()
+void MainWindow::writeToCOM2()
 {
     debugField->clear();
     outputField->clear();
@@ -81,8 +77,7 @@ MainWindow::writeToCOM2()
     inputField->clear();
 }
 
-void
-MainWindow::readFromCOM1()
+void MainWindow::readFromCOM1()
 {
     char buffer[1];
     com1.read(buffer,1);
@@ -99,8 +94,7 @@ MainWindow::readFromCOM1()
     }
 }
 
-QByteArray
-MainWindow::pack(QChar flag, QChar da, QChar sa, QString data, QChar fcs)
+QByteArray MainWindow::pack(QChar flag, QChar da, QChar sa, QString data, QChar fcs)
 {
     QByteArray package;
     package.append(flag);
@@ -120,8 +114,7 @@ MainWindow::pack(QChar flag, QChar da, QChar sa, QString data, QChar fcs)
     return package;
 }
 
-QByteArray
-MainWindow::unpack(QByteArray package)
+QByteArray MainWindow::unpack(QByteArray package)
 {
     package = byteStuffingDecode(package);
     package.remove(package.length()-1,1);
@@ -129,8 +122,7 @@ MainWindow::unpack(QByteArray package)
     return package;
 }
 
-QByteArray
-MainWindow::byteStuffingCode(QByteArray package)
+QByteArray MainWindow::byteStuffingCode(QByteArray package)
 {
     for(int i = DATA_INDEX_START ; i < package.length()-1 ; i++) {
         if((char)package[i] == 126) {
@@ -143,8 +135,7 @@ MainWindow::byteStuffingCode(QByteArray package)
     return package;
 }
 
-QByteArray
-MainWindow::byteStuffingDecode(QByteArray package)
+QByteArray MainWindow::byteStuffingDecode(QByteArray package)
 {
     for(int i = 0 ; i < package.length()-1 ; i++) {
         if((char)package[i] == 125) {
